@@ -12,29 +12,39 @@ const obj = {
   boxSize: 30,
 };
 
-const generateDiv = (index) =>
-  `<div style="background-color: ${getRandomHexColor()}; 
-  width: ${obj.boxSize + 10 * index}px; height: ${
-    obj.boxSize + 10 * index
-  }px; "></div>`;
+const generateDiv = () => {
+  const genDiv = `<div style="background-color: ${getRandomHexColor()}; 
+  width: ${obj.boxSize}px; height: ${obj.boxSize}px; "></div>`;
+  obj.boxSize += 10;
+  return genDiv;
+};
 
 const createBoxes = (amount) => {
   for (let i = 0; i < amount; i++) {
-    const newDiv = generateDiv(i);
+    const newDiv = generateDiv();
     obj.boxes.insertAdjacentHTML("beforeend", newDiv);
   }
 };
 
-const destroyBoxes = () => {
+const destroyBoxes = (amount) => {
   // https://stackoverflow.com/posts/40606838/revisions
-  while (boxes.firstChild) {
-    obj.boxes.firstChild.remove();
+  // while (boxes.firstChild) {
+  //   obj.boxes.firstChild.remove();
+  // }
+
+  // feature remove selected number of items
+  for (let i = 0; i < amount; i++) {
+    if (typeof boxes.lastChild != "undefined" && boxes.lastChild != null) {
+      obj.boxes.lastChild.remove();
+      obj.boxSize -= 10;
+    }
   }
 };
 
 obj.createBtn.addEventListener("click", () => {
-  destroyBoxes();
   createBoxes(Number(obj.input.value));
 });
 
-obj.destroyBtn.addEventListener("click", () => destroyBoxes());
+obj.destroyBtn.addEventListener("click", () =>
+  destroyBoxes(Number(obj.input.value))
+);
